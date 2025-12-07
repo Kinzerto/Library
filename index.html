@@ -20,21 +20,22 @@
     <main>
     </main>
 
-    <dialog class="dialog">
+    <dialog class="dialog" closedby="closerequest">
+        <button class="close" >X</button>
         <form method="dialog">
             <p>
                 <label for="book-name">Book</label>
-                <input type="text" name="book" id="book-name">
+                <input type="text" name="book" id="book-name" autofocus required>
             </p>
             <p>
                 <label for="author">Author</label>
-                <input type="text" name="author" id="author">
+                <input type="text" name="author" id="author" required>
             </p>
             <p>
                 <label for="page">Page</label>
-                <input type="number" name="page" id="page">
+                <input type="number" name="page" id="page" required>
             </p>
-            <button type="submit">Submit</button>
+            <button type="submit" class="submit">Submit</button>
         </form>
     </dialog>
 </body>
