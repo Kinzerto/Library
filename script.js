@@ -21,7 +21,7 @@ form.addEventListener("submit", function (e) {
     console.log("Form prevented!");
 });
 
-addBookToLibrary(new Book('dded', 'dede', 222))
+// addBookToLibrary(new Book('dded', 'dede', 222))
 
 // DIALOG
 const openModal = document.querySelector('header  .open-modal');
@@ -43,7 +43,8 @@ const libraryBook = document.querySelector('dialog #book-name');
 const libraryAuthor = document.querySelector('dialog #author');
 const libraryPage = document.querySelector('dialog #page')
 
-submit.addEventListener('click', () => {
+submit.addEventListener('click', (e) => {
+    e.preventDefault();
     if (!libraryBook.value.trim() === '' | libraryAuthor.value.trim() === '' || isNaN(libraryPage.value) || libraryPage.value <= 0) {
         if (libraryBook.value.trim() === '') {
             alert("Please enter a valid book name");
@@ -53,7 +54,7 @@ submit.addEventListener('click', () => {
             alert("Please enter a valid number of pages");
         }
     } else {
-        const newBook = new Book(libraryBook.value, libraryAuthor.value, libraryPage.value);
+        const newBook = new Book(libraryBook.value, libraryAuthor.value, Number(libraryPage.value));
         addBookToLibrary(newBook);
         displayBooks();
         libraryBook.value = "";
@@ -86,9 +87,10 @@ function displayBooks() {
         page.classList.add('pages');
 
         // DOM
-        bookName.textContent = books.bookName;
-        author.textContent = books.author;
-        page.textContent = books.page;
+        
+        bookName.textContent = `Book: ${books.bookName}`;
+        author.textContent = `Author: ${books.author}`;
+        page.textContent = `Pages: ${books.page}`;
     })
 }
 
