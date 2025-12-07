@@ -37,7 +37,6 @@ closeButton.addEventListener("click", (e) => {
     dialog.close();
 });
 
-// closeButton.innerHTML = "dkdkd";
 const submit = document.querySelector(".dialog form .submit");
 
 const libraryBook = document.querySelector('dialog #book-name');
@@ -45,9 +44,14 @@ const libraryAuthor = document.querySelector('dialog #author');
 const libraryPage = document.querySelector('dialog #page')
 
 submit.addEventListener('click', () => {
-
-
-    if (libraryBook.value === '' || libraryAuthor.value === '' || isNaN(libraryPage.value) || libraryPage.value <= 0) {
+    if (!libraryBook.value.trim() === '' | libraryAuthor.value.trim() === '' || isNaN(libraryPage.value) || libraryPage.value <= 0) {
+        if (libraryBook.value.trim() === '') {
+            alert("Please enter a valid book name");
+        } else if (libraryAuthor.value.trim() === '') {
+            alert("Please enter a valid author name");
+        } else if (isNaN(libraryPage.value) || libraryPage.value <= 0) {
+            alert("Please enter a valid number of pages");
+        }
     } else {
         const newBook = new Book(libraryBook.value, libraryAuthor.value, libraryPage.value);
         addBookToLibrary(newBook);
