@@ -14,53 +14,60 @@ function addBookToLibrary(book) {
     myLibrary.push(book);
 }
 
-const book1 = new Book('one piece', 'echiro oda', 1167);
-const book2 = new Book('Bleach','Tite Kubo' , 686);
+
+addBookToLibrary(new Book('dded', 'dede', 222))
+
+// DIALOG
+const openModal = document.querySelector('header  .open-modal');
+const dialog = document.querySelector(".dialog");
+const closeButton = document.querySelector("dialog button");
 
 
+openModal.addEventListener("click", () => {
+    dialog.showModal();
+});
 
+const submit = document.querySelector(".dialog button");
 
-addBookToLibrary(book1);
-addBookToLibrary(book2);
+const libraryBook = document.querySelector('dialog #book-name');
+const libraryAuthor = document.querySelector('dialog #author');
+const libraryPage = document.querySelector('dialog #page');
 
-const main = document.querySelector('main');
-
-myLibrary.forEach((books) => {
-    const cardContainer = document.createElement("div");
-    main.appendChild(cardContainer);
-    cardContainer.classList.add("card");
-
-    //CONTENT
-    const bookName = document.createElement('h2');
-    const author = document.createElement('div');
-    const page = document.createElement('div');
-
-    cardContainer.appendChild(bookName);
-    cardContainer.appendChild(author);
-    cardContainer.appendChild(page);
-
-    author.classList.add('author');
-    page.classList.add('pages');
-
-    // BUTTONS
-    const status = document.createElement('button');
-    const remove = document.createElement('button');
-
-    cardContainer.appendChild(status);
-    cardContainer.appendChild(remove);
-
-    status.classList.add('status');
-    remove.classList.add('remove');
-
-    // DOM
-    bookName.textContent = books.bookName;
-    author.textContent = books.author;
-    page.textContent = books.page;
-    status.textContent = 'mark as read';
-    remove.textContent = 'remove';
-
-    // cardContainer.textContent = books.bookName
+const output = document.querySelector('output')
+submit.addEventListener('click', () => {
+    addBookToLibrary(new Book(libraryBook.value, libraryAuthor.value, libraryPage.value));
+    displayBooks()
 
 })
 
+//DISPLAY BOOKS
+const main = document.querySelector('main');
 
+function displayBooks() {
+    main.textContent = ""; 
+    myLibrary.forEach((books) => {
+        const cardContainer = document.createElement("div");
+        main.appendChild(cardContainer);
+        cardContainer.classList.add("card");
+
+        //CONTENT
+        const bookName = document.createElement('h2');
+        const author = document.createElement('div');
+        const page = document.createElement('div');
+
+        cardContainer.appendChild(bookName);
+        cardContainer.appendChild(author);
+        cardContainer.appendChild(page);
+
+        author.classList.add('author');
+        page.classList.add('pages');
+
+        // DOM
+        bookName.textContent = books.bookName;
+        author.textContent = books.author;
+        page.textContent = books.page;
+    })
+}
+
+
+displayBooks()
