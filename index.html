@@ -9,17 +9,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 
 <body>
     <header>
         <h1>Library</h1>
-        <button>+ Add Book</button>
+        <button class="open-modal">+ Add Book</button>
     </header>
-    <main> 
+    <main>
     </main>
-    <script src="script.js"></script>
 
+    <dialog class="dialog">
+        <form method="dialog">
+            <p>
+                <label for="book-name">Book</label>
+                <input type="text" name="book" id="book-name">
+            </p>
+            <p>
+                <label for="author">Author</label>
+                <input type="text" name="author" id="author">
+            </p>
+            <p>
+                <label for="page">Page</label>
+                <input type="number" name="page" id="page">
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+    </dialog>
 </body>
 
 </html>
