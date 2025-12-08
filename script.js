@@ -21,7 +21,11 @@ form.addEventListener("submit", function (e) {
     console.log("Form prevented!");
 });
 
-// addBookToLibrary(new Book('dded', 'dede', 222))
+const first = new Book('first', 'kinth', 1)
+
+addBookToLibrary(first)
+addBookToLibrary(new Book('second', 'kinth', 2))
+addBookToLibrary(new Book('third', 'kinth', 3))
 
 // DIALOG
 const openModal = document.querySelector('header  .open-modal');
@@ -66,13 +70,14 @@ submit.addEventListener('click', (e) => {
 
 //DISPLAY BOOKS
 const main = document.querySelector('main');
-
+main.dataset.columns; // "3"
 function displayBooks() {
     main.textContent = "";
     myLibrary.forEach((books) => {
         const cardContainer = document.createElement("div");
         main.appendChild(cardContainer);
         cardContainer.classList.add("card");
+
 
         //CONTENT
         const bookName = document.createElement('h2');
@@ -87,12 +92,41 @@ function displayBooks() {
         page.classList.add('pages');
 
         // DOM
-        
-        bookName.textContent = `Book: ${books.bookName}`;
+
+        bookName.textContent = `${books.bookName}`;
         author.textContent = `Author: ${books.author}`;
         page.textContent = `Pages: ${books.page}`;
+
+        // BUTTONS
+        const status = document.createElement('button');
+        const remove = document.createElement('button');
+        cardContainer.appendChild(status);
+        cardContainer.appendChild(remove);
+
+        status.classList.add('status');
+        remove.classList.add('remove');
+
+        status.textContent = 'Not Read';
+        remove.textContent = 'Remove';
+
+        cardContainer.setAttribute('data-id', books.id);
+
+
     })
 }
 
+main.addEventListener('click', (event) => {
+    if (event.target.closest('.remove')) {
+        const cardId = event.target.closest(".card").dataset.id;
+        const removeCard = event.target.closest(".card");
+        console.log(event.target);
 
-displayBooks()
+        const index = myLibrary.findIndex(book => {
+            return book.id === cardId
+        });
+
+        myLibrary.splice(index, 1)
+        displayBooks();
+    }
+})
+displayBooks();
