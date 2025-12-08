@@ -24,10 +24,9 @@ form.addEventListener("submit", function (e) {
     console.log("Form prevented!");
 });
 
-const first = new Book('first', 'kinth', 1)
+const first = new Book('One Piece', 'Eiichiro Oda', 1000, 'Read')
 addBookToLibrary(first)
-addBookToLibrary(new Book('second', 'kinth', 2))
-addBookToLibrary(new Book('third', 'kinth', 3))
+
 
 // DIALOG
 const openModal = document.querySelector('header  .open-modal');
@@ -112,7 +111,7 @@ function displayBooks() {
         page.textContent = `Pages: ${books.page}`;
         readingStatus.textContent = `Status: ${books.status}`
 
-        if (readingStatus.textContent === 'Status: Not Read') {
+        if (books.status === 'Not Read') {
             readingStatus.classList.remove('Read');
         }
 
@@ -146,13 +145,12 @@ main.addEventListener('click', (event) => {
     if (!btn) return;
 
     const card = btn.closest(".card");
-    const readingStatus = card.querySelector(".readingStatus");
-    
+
     const cardId = btn.closest(".card").dataset.id;
     const book = myLibrary.find((book) => book.id === cardId);
 
     book.toggleStatus();
-    btn.textContent = book.status;
+    // btn.textContent = book.status;
 
 
     displayBooks()
