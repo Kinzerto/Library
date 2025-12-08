@@ -1,6 +1,6 @@
 const myLibrary = [];
 
-function Book(book, author, page) {
+function Book(book, author, page, status = 'Not Read') {
     if (!new.target) {
         throw Error("You must use the 'new' operator to call the constructor");
     }
@@ -8,7 +8,10 @@ function Book(book, author, page) {
     this.bookName = book;
     this.author = author;
     this.page = page;
+    this.status = status;
 }
+
+
 
 function addBookToLibrary(book) {
     myLibrary.push(book);
@@ -22,7 +25,6 @@ form.addEventListener("submit", function (e) {
 });
 
 const first = new Book('first', 'kinth', 1)
-
 addBookToLibrary(first)
 addBookToLibrary(new Book('second', 'kinth', 2))
 addBookToLibrary(new Book('third', 'kinth', 3))
@@ -45,7 +47,8 @@ const submit = document.querySelector(".dialog form .submit");
 
 const libraryBook = document.querySelector('dialog #book-name');
 const libraryAuthor = document.querySelector('dialog #author');
-const libraryPage = document.querySelector('dialog #page')
+const libraryPage = document.querySelector('dialog #page');
+const readOrNOt = document.querySelector('dialog #readOrNot');
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
@@ -58,7 +61,13 @@ submit.addEventListener('click', (e) => {
             alert("Please enter a valid number of pages");
         }
     } else {
-        const newBook = new Book(libraryBook.value, libraryAuthor.value, Number(libraryPage.value));
+        let readingStat = ''
+        if (readOrNOt.checked) {
+            readingStat = 'Read';
+        } else {
+            readingStat = 'Not Read';
+        }
+        const newBook = new Book(libraryBook.value, libraryAuthor.value, Number(libraryPage.value), readingStat);
         addBookToLibrary(newBook);
         displayBooks();
         libraryBook.value = "";
@@ -73,7 +82,7 @@ const main = document.querySelector('main');
 main.dataset.columns; // "3"
 function displayBooks() {
     main.textContent = "";
-    myLibrary.forEach((books) => {
+    myLibrary.forEach((books, index) => {
         const cardContainer = document.createElement("div");
         main.appendChild(cardContainer);
         cardContainer.classList.add("card");
@@ -83,44 +92,76 @@ function displayBooks() {
         const bookName = document.createElement('h2');
         const author = document.createElement('div');
         const page = document.createElement('div');
+        const readingStatus = document.createElement('div');
 
         cardContainer.appendChild(bookName);
         cardContainer.appendChild(author);
         cardContainer.appendChild(page);
+        cardContainer.appendChild(readingStatus);
 
         author.classList.add('author');
         page.classList.add('pages');
+        readingStatus.classList.add('readingStatus');
+        readingStatus.classList.add('Read');
+
 
         // DOM
 
         bookName.textContent = `${books.bookName}`;
         author.textContent = `Author: ${books.author}`;
         page.textContent = `Pages: ${books.page}`;
+        readingStatus.textContent = `Status: ${books.status}`
+
+        if (readingStatus.textContent === 'Status: Not Read') {
+            readingStatus.classList.remove('Read');
+        }
+
+
+
 
         // BUTTONS
-        const status = document.createElement('button');
+
         const remove = document.createElement('button');
+        const status = document.createElement('button');
         cardContainer.appendChild(status);
         cardContainer.appendChild(remove);
 
         status.classList.add('status');
         remove.classList.add('remove');
 
-        status.textContent = 'Not Read';
+        status.textContent = books.status === 'Read' ? 'Not Read' : 'Read';
         remove.textContent = 'Remove';
 
         cardContainer.setAttribute('data-id', books.id);
 
-
     })
 }
+displayBooks();
+
+Book.prototype.toggleStatus = function (button) {
+    return this.status = this.status === "Read" ? "Not Read" : "Read";
+}
+main.addEventListener('click', (event) => {
+    const btn = event.target.closest(".status");
+    if (!btn) return;
+
+    const card = btn.closest(".card");
+    const readingStatus = card.querySelector(".readingStatus");
+    
+    const cardId = btn.closest(".card").dataset.id;
+    const book = myLibrary.find((book) => book.id === cardId);
+
+    book.toggleStatus();
+    btn.textContent = book.status;
+
+
+    displayBooks()
+
+})
 
 main.addEventListener('click', (event) => {
     if (event.target.closest('.remove')) {
         const cardId = event.target.closest(".card").dataset.id;
-        const removeCard = event.target.closest(".card");
-        console.log(event.target);
-
         const index = myLibrary.findIndex(book => {
             return book.id === cardId
         });
@@ -129,4 +170,8 @@ main.addEventListener('click', (event) => {
         displayBooks();
     }
 })
-displayBooks();
+
+
+
+
+
