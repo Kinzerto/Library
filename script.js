@@ -1,21 +1,27 @@
-const myLibrary = [];
+class Book {
+    static #myLibrary = [];
+    constructor(book, author, page, status = 'Not Read') {
+        this.id = crypto.randomUUID();
+        this.bookName = book;
+        this.author = author;
+        this.page = page;
+        this.status = status;
 
-function Book(book, author, page, status = 'Not Read') {
-    if (!new.target) {
-        throw Error("You must use the 'new' operator to call the constructor");
+        Book.#myLibrary.push(this);
     }
-    this.id = crypto.randomUUID();
-    this.bookName = book;
-    this.author = author;
-    this.page = page;
-    this.status = status;
+
+    static get getLibrary () {
+         return Book.#myLibrary;
+    }
+    // addBookToLibrary(newBook);
+
 }
 
+const myLibrary = Book.getLibrary;
 
-
-function addBookToLibrary(book) {
-    myLibrary.push(book);
-}
+// function addBookToLibrary(book) {
+//     myLibrary.push(book);
+// }
 const form = document.querySelector("dialog > form");
 
 // PREVENT FORM RELOAD
@@ -24,8 +30,8 @@ form.addEventListener("submit", function (e) {
     console.log("Form prevented!");
 });
 
-const first = new Book('One Piece', 'Eiichiro Oda', 1000, 'Read')
-addBookToLibrary(first)
+const first = new Book('One Piece', 'Eiichiro Oda', 1000, 'Read');
+// addBookToLibrary(first)
 
 
 // DIALOG
@@ -67,7 +73,7 @@ submit.addEventListener('click', (e) => {
             readingStat = 'Not Read';
         }
         const newBook = new Book(libraryBook.value, libraryAuthor.value, Number(libraryPage.value), readingStat);
-        addBookToLibrary(newBook);
+        // addBookToLibrary(newBook);
         displayBooks();
         libraryBook.value = "";
         libraryAuthor.value = "";
@@ -79,9 +85,10 @@ submit.addEventListener('click', (e) => {
 //DISPLAY BOOKS
 const main = document.querySelector('main');
 main.dataset.columns; // "3"
+
 function displayBooks() {
     main.textContent = "";
-    myLibrary.forEach((books, index) => {
+    myLibrary.forEach(books => {
         const cardContainer = document.createElement("div");
         main.appendChild(cardContainer);
         cardContainer.classList.add("card");
@@ -138,7 +145,7 @@ function displayBooks() {
 displayBooks();
 
 Book.prototype.toggleStatus = function (button) {
-    return this.status = this.status === "Read" ? "Not Read" : "Read";
+    return button.status = button.status === "Read" ? "Not Read" : "Read";
 }
 main.addEventListener('click', (event) => {
     const btn = event.target.closest(".status");
@@ -147,9 +154,11 @@ main.addEventListener('click', (event) => {
     const card = btn.closest(".card");
 
     const cardId = btn.closest(".card").dataset.id;
+
     const book = myLibrary.find((book) => book.id === cardId);
 
-    book.toggleStatus();
+    console.log(book);
+    book.toggleStatus(book);
     // btn.textContent = book.status;
 
 
