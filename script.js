@@ -1,23 +1,33 @@
-class Book {
+class Library {
     static #myLibrary = [];
+
+    static getLibrary() {
+        return this.#myLibrary;
+    }
+
+    static addBook(book) {
+        Library.#myLibrary.push(book);
+    }
+}
+
+class Book  extends Library {
     constructor(book, author, page, status = 'Not Read') {
+        super();
         this.id = crypto.randomUUID();
         this.bookName = book;
         this.author = author;
         this.page = page;
         this.status = status;
 
-        Book.#myLibrary.push(this);
+        Library.addBook(this)
     }
 
-    static get getLibrary () {
-         return Book.#myLibrary;
+    static getBook(){
+        return Library.getLibrary()
     }
-    // addBookToLibrary(newBook);
-
 }
 
-const myLibrary = Book.getLibrary;
+const myLibrary = Book.getBook();
 
 // function addBookToLibrary(book) {
 //     myLibrary.push(book);
