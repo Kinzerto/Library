@@ -67,7 +67,7 @@ const readOrNOt = document.querySelector('dialog #readOrNot');
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
-    if (!libraryBook.value.trim() === '' | libraryAuthor.value.trim() === '' || isNaN(libraryPage.value) || libraryPage.value <= 0) {
+    if (!libraryBook.value.trim() || !libraryAuthor.value.trim() || isNaN(libraryPage.value) || libraryPage.value <= 0) {
         if (libraryBook.value.trim() === '') {
             alert("Please enter a valid book name");
         } else if (libraryAuthor.value.trim() === '') {
@@ -98,53 +98,37 @@ main.dataset.columns; // "3"
 
 function displayBooks() {
     main.textContent = "";
+    function createElement(tag, className, parent) {
+        const element = document.createElement(tag);
+        element.classList.add(className);
+        parent.appendChild(element);
+        return element;
+    }
     myLibrary.forEach(books => {
-        const cardContainer = document.createElement("div");
-        main.appendChild(cardContainer);
-        cardContainer.classList.add("card");
-
-
+        //main CONTAINER
+        const cardContainer = createElement('div', 'card', main);
+        cardContainer.setAttribute('data-id', books.id);
         //CONTENT
-        const bookName = document.createElement('h2');
-        const author = document.createElement('div');
-        const page = document.createElement('div');
-        const readingStatus = document.createElement('div');
-
-        cardContainer.appendChild(bookName);
-        cardContainer.appendChild(author);
-        cardContainer.appendChild(page);
-        cardContainer.appendChild(readingStatus);
-
-        author.classList.add('author');
-        page.classList.add('pages');
-        readingStatus.classList.add('readingStatus');
-        
-
-
-        // DOM
-
+        const bookName = createElement('h2', 'bookName', cardContainer);
+        const author = createElement('div', 'author', cardContainer);
+        const page = createElement('div', 'pages', cardContainer);
+        const readingStatus = createElement('div', 'readingStatus', cardContainer);
+        // DOM CONTENT
         bookName.textContent = `${books.bookName}`;
         author.textContent = `Author: ${books.author}`;
         page.textContent = `Pages: ${books.page}`;
         readingStatus.textContent = `Status: ${books.status}`
-
         // BUTTONS
-
-        const remove = document.createElement('button');
-        const buttonStatus = document.createElement('button');
-        cardContainer.appendChild(buttonStatus);
-        cardContainer.appendChild(remove);
-
-        buttonStatus.classList.add('status');
-        remove.classList.add('remove');
+        const buttonStatus = createElement('button', 'status', cardContainer);
+        const remove = createElement('button', 'remove', cardContainer);
         remove.textContent = 'Remove';
 
-        buttonStatus.textContent = books.status === 'Read' ? 'Not Read' : 'Read';
-        cardContainer.setAttribute('data-id', books.id);
 
-        if(books.status === 'Read' ){
+        buttonStatus.textContent = books.status === 'Read' ? 'Not Read' : 'Read';
+
+        if (books.status === 'Read') {
             readingStatus.classList.add('Read')
-        }else{
+        } else {
             readingStatus.classList.remove('Read')
         }
     })
@@ -152,8 +136,9 @@ function displayBooks() {
 displayBooks();
 
 Book.prototype.toggleStatus = function (status) {
-    return status.status === 'Read' ? 'Not Read' : 'Read';
+    return this.status = this.status === 'Read' ? 'Not Read' : 'Read';
 }
+
 main.addEventListener('click', (event) => {
     if (!event.target.closest('button')) return;
     if (event.target.closest('.remove')) {
@@ -170,18 +155,8 @@ main.addEventListener('click', (event) => {
 
     const cardId = btn.closest(".card").dataset.id;
     const book = myLibrary.find((book) => book.id === cardId);
-    book.status = book.toggleStatus(book);
-    console.log(book);
-
-    const statusElement = main.querySelector(' .readingStatus');
-    // if (book.status === 'Read') {
-    //     statusElement.classList.add('read')
-    // } else {
-    //     btn.textContent = 'Read';
-    // }
-
+    book.toggleStatus(book);
     displayBooks()
-
 })
 
 
