@@ -156,7 +156,7 @@ main.addEventListener('click', (event) => {
 
     const cardId = btn.closest(".card").dataset.id;
     const book = myLibrary.find((book) => book.id === cardId);
-    book.toggleStatus(book);
+    book.toggleStatus();
     displayBooks()
 })
 
