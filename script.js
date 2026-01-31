@@ -10,7 +10,7 @@ class Library {
     }
 }
 
-class Book  extends Library {
+class Book extends Library {
     constructor(book, author, page, status = 'Not Read') {
         super();
         this.id = crypto.randomUUID();
@@ -22,7 +22,7 @@ class Book  extends Library {
         Library.addBook(this)
     }
 
-    static getBook(){
+    static getBook() {
         return Library.getLibrary()
     }
 }
@@ -82,7 +82,7 @@ submit.addEventListener('click', (e) => {
         } else {
             readingStat = 'Not Read';
         }
-        const newBook = new Book(libraryBook.value, libraryAuthor.value, Number(libraryPage.value), readingStat);
+        new Book(libraryBook.value, libraryAuthor.value, Number(libraryPage.value), readingStat);
         // addBookToLibrary(newBook);
         displayBooks();
         libraryBook.value = "";
@@ -118,7 +118,7 @@ function displayBooks() {
         author.classList.add('author');
         page.classList.add('pages');
         readingStatus.classList.add('readingStatus');
-        readingStatus.classList.add('Read');
+        
 
 
         // DOM
@@ -128,55 +128,34 @@ function displayBooks() {
         page.textContent = `Pages: ${books.page}`;
         readingStatus.textContent = `Status: ${books.status}`
 
-        if (books.status === 'Not Read') {
-            readingStatus.classList.remove('Read');
-        }
-
-
-
-
         // BUTTONS
 
         const remove = document.createElement('button');
-        const status = document.createElement('button');
-        cardContainer.appendChild(status);
+        const buttonStatus = document.createElement('button');
+        cardContainer.appendChild(buttonStatus);
         cardContainer.appendChild(remove);
 
-        status.classList.add('status');
+        buttonStatus.classList.add('status');
         remove.classList.add('remove');
-
-        status.textContent = books.status === 'Read' ? 'Not Read' : 'Read';
         remove.textContent = 'Remove';
 
+        buttonStatus.textContent = books.status === 'Read' ? 'Not Read' : 'Read';
         cardContainer.setAttribute('data-id', books.id);
 
+        if(books.status === 'Read' ){
+            readingStatus.classList.add('Read')
+        }else{
+            readingStatus.classList.remove('Read')
+        }
     })
 }
 displayBooks();
 
-Book.prototype.toggleStatus = function (button) {
-    return button.status = button.status === "Read" ? "Not Read" : "Read";
+Book.prototype.toggleStatus = function (status) {
+    return status.status === 'Read' ? 'Not Read' : 'Read';
 }
 main.addEventListener('click', (event) => {
-    const btn = event.target.closest(".status");
-    if (!btn) return;
-
-    const card = btn.closest(".card");
-
-    const cardId = btn.closest(".card").dataset.id;
-
-    const book = myLibrary.find((book) => book.id === cardId);
-
-    console.log(book);
-    book.toggleStatus(book);
-    // btn.textContent = book.status;
-
-
-    displayBooks()
-
-})
-
-main.addEventListener('click', (event) => {
+    if (!event.target.closest('button')) return;
     if (event.target.closest('.remove')) {
         const cardId = event.target.closest(".card").dataset.id;
         const index = myLibrary.findIndex(book => {
@@ -186,6 +165,23 @@ main.addEventListener('click', (event) => {
         myLibrary.splice(index, 1)
         displayBooks();
     }
+    const btn = event.target.closest('.status');
+    if (!btn) return;
+
+    const cardId = btn.closest(".card").dataset.id;
+    const book = myLibrary.find((book) => book.id === cardId);
+    book.status = book.toggleStatus(book);
+    console.log(book);
+
+    const statusElement = main.querySelector(' .readingStatus');
+    // if (book.status === 'Read') {
+    //     statusElement.classList.add('read')
+    // } else {
+    //     btn.textContent = 'Read';
+    // }
+
+    displayBooks()
+
 })
 
 
