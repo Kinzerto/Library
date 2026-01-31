@@ -25,6 +25,9 @@ class Book extends Library {
     static getBook() {
         return Library.getLibrary()
     }
+    toggleStatus (status) {
+        this.status = this.status === 'Read' ? 'Not Read' : 'Read';
+    }
 }
 
 const myLibrary = Book.getBook();
@@ -135,9 +138,7 @@ function displayBooks() {
 }
 displayBooks();
 
-Book.prototype.toggleStatus = function (status) {
-    return this.status = this.status === 'Read' ? 'Not Read' : 'Read';
-}
+
 
 main.addEventListener('click', (event) => {
     if (!event.target.closest('button')) return;
